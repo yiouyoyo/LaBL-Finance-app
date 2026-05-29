@@ -114,37 +114,41 @@ export default function InvoiceTracker() {
     if (id.startsWith('local-')) return
     setInvoices((prev) => prev.map((inv) => (inv.id === id ? { ...inv, _uploading: true } : inv)))
 
-    const ext = file.name.split('.').pop()
-    const filePath = `${id}/${Date.now()}.${ext}`
-    const inv = invoices.find((i) => i.id === id)
-    if (inv?.proof_file_path) {
-      await supabase.storage.from('invoices').remove([inv.proof_file_path])
-    }
+    const form = new FormData()
+    form.append('file', file)
+    form.append('invoiceId', id)
 
-    const { error: uploadError } = await supabase.storage
-      .from('invoices')
-      .upload(filePath, file, { upsert: true })
+    const res = await fetch('/api/upload', { method: 'POST', body: form })
+    const json = await res.json()
 
-    if (!uploadError) {
-      await supabase.from('invoices')
-        .update({ proof_file_path: filePath, proof_file_name: file.name })
-        .eq('id', id)
-      setInvoices((prev) =>
-        prev.map((inv) =>
-          inv.id === id
-            ? { ...inv, proof_file_path: filePath, proof_file_name: file.name, _uploading: false }
-            : inv
-        )
-      )
-    } else {
+    if (!res.ok) {
+      setDbError(json.error || 'Upload failed')
       setInvoices((prev) => prev.map((inv) => (inv.id === id ? { ...inv, _uploading: false } : inv)))
+      return
     }
+
+    const { filePath, fileName } = json
+    await supabase.from('invoices')
+      .update({ proof_file_path: filePath, proof_file_name: fileName })
+      .eq('id', id)
+
+    setInvoices((prev) =>
+      prev.map((inv) =>
+        inv.id === id
+          ? { ...inv, proof_file_path: filePath, proof_file_name: fileName, _uploading: false }
+          : inv
+      )
+    )
   }
 
   async function removeFile(id: string) {
     const inv = invoices.find((i) => i.id === id)
     if (inv?.proof_file_path) {
-      await supabase.storage.from('invoices').remove([inv.proof_file_path])
+      await fetch('/api/remove-file', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filePath: inv.proof_file_path }),
+      })
     }
     await supabase.from('invoices').update({ proof_file_path: null, proof_file_name: null }).eq('id', id)
     setInvoices((prev) =>

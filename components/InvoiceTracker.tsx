@@ -5,13 +5,13 @@ import { supabase, type Invoice, ACCOUNT_OPTIONS } from '@/lib/supabase'
 
 type EditableInvoice = Invoice & { _uploading?: boolean }
 
-const EMPTY_ROW: Omit<EditableInvoice, 'id' | 'created_at'> = {
-  date_purchased: '',
-  who_purchased: '',
-  account: '',
-  item_purchased: '',
+const EMPTY_ROW = {
+  date_purchased: null,
+  who_purchased: null,
+  account: null,
+  item_purchased: null,
   amount: null,
-  purpose: '',
+  purpose: null,
   proof_file_path: null,
   proof_file_name: null,
 }
@@ -59,8 +59,14 @@ export default function InvoiceTracker() {
       .insert([EMPTY_ROW])
       .select()
       .single()
-    if (!error && data) {
+    if (error) {
+      console.error('Add row error:', error)
+      return
+    }
+    if (data) {
       setInvoices((prev) => [...prev, data as EditableInvoice])
+    } else {
+      await fetchInvoices()
     }
   }
 

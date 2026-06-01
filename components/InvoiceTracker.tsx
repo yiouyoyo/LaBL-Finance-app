@@ -31,6 +31,9 @@ export default function InvoiceTracker() {
   const [invoices, setInvoices] = useState<EditableInvoice[]>([])
   const [loading, setLoading] = useState(true)
   const [dbError, setDbError] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
+  const [filterAccount, setFilterAccount] = useState('')
+  const [filterTravel, setFilterTravel] = useState('')
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({})
 
   useEffect(() => {
@@ -170,7 +173,18 @@ export default function InvoiceTracker() {
     return /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(fileName)
   }
 
-  const total = invoices.reduce((sum, inv) => sum + (inv.amount || 0), 0)
+  const filtered = invoices.filter((inv) => {
+    const q = search.toLowerCase()
+    const matchesSearch = !q || [
+      inv.who_purchased, inv.item_purchased, inv.purpose,
+      inv.account, inv.travel_type, inv.date_purchased, inv.submission_date,
+    ].some((v) => v?.toLowerCase().includes(q))
+    const matchesAccount = !filterAccount || inv.account === filterAccount
+    const matchesTravel = !filterTravel || inv.travel_type === filterTravel
+    return matchesSearch && matchesAccount && matchesTravel
+  })
+
+  const total = filtered.reduce((sum, inv) => sum + (inv.amount || 0), 0)
   const cellStyle = { borderColor: '#d0dce8', color: '#1a2640', backgroundColor: 'transparent', fontSize: '0.8125rem' }
   const inputClass = 'w-full px-2 py-1 rounded border text-xs outline-none bg-transparent transition-colors'
 
@@ -197,6 +211,58 @@ export default function InvoiceTracker() {
               style={{ borderColor: '#1a3a6b', borderTopColor: 'transparent' }} />
           </div>
         ) : (
+          <>
+          {/* Search + filter bar */}
+          <div className="flex flex-wrap gap-2 mb-3 items-center">
+            <div className="relative flex-1" style={{ minWidth: '180px' }}>
+              <svg className="absolute left-2.5 top-1/2 -translate-y-1/2" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4a90d9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input
+                type="text"
+                placeholder="Search any field…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-8 pr-3 py-1.5 rounded-lg border text-sm outline-none"
+                style={{ borderColor: '#d0dce8', color: '#1a2640', backgroundColor: '#fff' }}
+                onFocus={(e) => (e.target.style.borderColor = '#4a90d9')}
+                onBlur={(e) => (e.target.style.borderColor = '#d0dce8')}
+              />
+            </div>
+            <select
+              value={filterAccount}
+              onChange={(e) => setFilterAccount(e.target.value)}
+              className="px-3 py-1.5 rounded-lg border text-sm outline-none"
+              style={{ borderColor: '#d0dce8', color: '#1a2640', backgroundColor: '#fff' }}
+            >
+              <option value="">All accounts</option>
+              {ACCOUNT_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
+            </select>
+            <select
+              value={filterTravel}
+              onChange={(e) => setFilterTravel(e.target.value)}
+              className="px-3 py-1.5 rounded-lg border text-sm outline-none"
+              style={{ borderColor: '#d0dce8', color: '#1a2640', backgroundColor: '#fff' }}
+            >
+              <option value="">All expense types</option>
+              {TRAVEL_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
+            </select>
+            {(search || filterAccount || filterTravel) && (
+              <button
+                onClick={() => { setSearch(''); setFilterAccount(''); setFilterTravel('') }}
+                className="px-3 py-1.5 rounded-lg border text-sm"
+                style={{ borderColor: '#d0dce8', color: '#c0392b', backgroundColor: '#fff' }}
+              >
+                Clear
+              </button>
+            )}
+            {(search || filterAccount || filterTravel) && (
+              <span className="text-xs" style={{ color: '#4a5568' }}>
+                {filtered.length} of {invoices.length} rows
+              </span>
+            )}
+          </div>
+
           <div className="bg-white rounded-xl border overflow-hidden" style={{ borderColor: '#d0dce8' }}>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse" style={{ minWidth: '900px' }}>
@@ -208,7 +274,7 @@ export default function InvoiceTracker() {
                   </tr>
                 </thead>
                 <tbody>
-                  {invoices.map((inv, idx) => (
+                  {filtered.map((inv, idx) => (
                     <tr key={inv.id} style={{ backgroundColor: idx % 2 === 0 ? '#ffffff' : '#f5f7fa', borderBottom: '1px solid #d0dce8', opacity: inv._pending ? 0.6 : 1 }}>
                       {/* Purchase Date */}
                       <td className="px-2 py-1.5" style={{ minWidth: '130px' }}>
@@ -377,6 +443,7 @@ export default function InvoiceTracker() {
               </div>
             </div>
           </div>
+          </>
         )}
       </main>
     </div>

@@ -13,6 +13,7 @@ function makeEmptyRow(): EditableInvoice {
   return {
     id: makeLocalId(),
     date_purchased: null,
+    submission_date: null,
     who_purchased: null,
     account: null,
     item_purchased: null,
@@ -68,6 +69,7 @@ export default function InvoiceTracker() {
       .from('invoices')
       .insert([{
         date_purchased: null,
+        submission_date: null,
         who_purchased: null,
         account: null,
         item_purchased: null,
@@ -200,7 +202,7 @@ export default function InvoiceTracker() {
               <table className="w-full border-collapse" style={{ minWidth: '900px' }}>
                 <thead>
                   <tr style={{ backgroundColor: '#1a3a6b' }}>
-                    {['Date', 'Purchased By', 'Account', 'Item', 'Amount ($)', 'Purpose', 'Travel / Non-Travel', 'Proof', ''].map((h) => (
+                    {['Purchase Date', 'Submission Date', 'Purchased By', 'Account', 'Item', 'Amount ($)', 'Purpose', 'Travel / Non-Travel', 'Proof', ''].map((h) => (
                       <th key={h} className="px-3 py-3 text-left text-xs font-semibold text-white whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
@@ -208,11 +210,20 @@ export default function InvoiceTracker() {
                 <tbody>
                   {invoices.map((inv, idx) => (
                     <tr key={inv.id} style={{ backgroundColor: idx % 2 === 0 ? '#ffffff' : '#f5f7fa', borderBottom: '1px solid #d0dce8', opacity: inv._pending ? 0.6 : 1 }}>
-                      {/* Date */}
-                      <td className="px-2 py-1.5" style={{ minWidth: '120px' }}>
+                      {/* Purchase Date */}
+                      <td className="px-2 py-1.5" style={{ minWidth: '130px' }}>
                         <input type="date" className={inputClass} style={{ ...cellStyle, borderColor: '#d0dce8' }}
                           value={inv.date_purchased || ''}
                           onChange={(e) => updateField(inv.id, 'date_purchased', e.target.value || null)}
+                          onFocus={(e) => (e.target.style.borderColor = '#4a90d9')}
+                          onBlur={(e) => (e.target.style.borderColor = '#d0dce8')} />
+                      </td>
+
+                      {/* Submission Date */}
+                      <td className="px-2 py-1.5" style={{ minWidth: '130px' }}>
+                        <input type="date" className={inputClass} style={{ ...cellStyle, borderColor: '#d0dce8' }}
+                          value={inv.submission_date || ''}
+                          onChange={(e) => updateField(inv.id, 'submission_date', e.target.value || null)}
                           onFocus={(e) => (e.target.style.borderColor = '#4a90d9')}
                           onBlur={(e) => (e.target.style.borderColor = '#d0dce8')} />
                       </td>
@@ -334,7 +345,7 @@ export default function InvoiceTracker() {
 
                   {invoices.length === 0 && (
                     <tr>
-                      <td colSpan={9} className="px-4 py-12 text-center text-sm" style={{ color: '#4a5568' }}>
+                      <td colSpan={10} className="px-4 py-12 text-center text-sm" style={{ color: '#4a5568' }}>
                         No invoices yet. Click &quot;Add Row&quot; to get started.
                       </td>
                     </tr>

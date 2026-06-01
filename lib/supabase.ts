@@ -8,6 +8,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 export type Invoice = {
   id: string
   date_purchased: string | null
+  submission_date: string | null
   who_purchased: string | null
   account: string | null
   item_purchased: string | null

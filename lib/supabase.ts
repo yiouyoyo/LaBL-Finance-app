@@ -13,16 +13,19 @@ export type Invoice = {
   item_purchased: string | null
   amount: number | null
   purpose: string | null
+  travel_type: string | null
   proof_file_path: string | null
   proof_file_name: string | null
   created_at: string
 }
 
 export const ACCOUNT_OPTIONS = [
-  'Research account',
-  'ProNET account',
-  'PRESCIENT account',
-  'Hatchery/MedEase',
-  'Travel fund',
-  'Other',
+  'ProNET',
+  'ProCAN',
+  'Research',
+]
+
+export const TRAVEL_OPTIONS = [
+  'Travel related',
+  'Non-travel related',
 ]

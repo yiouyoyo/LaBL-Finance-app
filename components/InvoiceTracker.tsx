@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { supabase, type Invoice, ACCOUNT_OPTIONS } from '@/lib/supabase'
+import { supabase, type Invoice, ACCOUNT_OPTIONS, TRAVEL_OPTIONS } from '@/lib/supabase'
 
 type EditableInvoice = Invoice & { _uploading?: boolean; _pending?: boolean }
 
@@ -18,6 +18,7 @@ function makeEmptyRow(): EditableInvoice {
     item_purchased: null,
     amount: null,
     purpose: null,
+    travel_type: null,
     proof_file_path: null,
     proof_file_name: null,
     created_at: new Date().toISOString(),
@@ -72,6 +73,7 @@ export default function InvoiceTracker() {
         item_purchased: null,
         amount: null,
         purpose: null,
+        travel_type: null,
         proof_file_path: null,
         proof_file_name: null,
       }])
@@ -198,7 +200,7 @@ export default function InvoiceTracker() {
               <table className="w-full border-collapse" style={{ minWidth: '900px' }}>
                 <thead>
                   <tr style={{ backgroundColor: '#1a3a6b' }}>
-                    {['Date', 'Purchased By', 'Account', 'Item', 'Amount ($)', 'Purpose', 'Proof', ''].map((h) => (
+                    {['Date', 'Purchased By', 'Account', 'Item', 'Amount ($)', 'Purpose', 'Travel / Non-Travel', 'Proof', ''].map((h) => (
                       <th key={h} className="px-3 py-3 text-left text-xs font-semibold text-white whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
@@ -263,6 +265,18 @@ export default function InvoiceTracker() {
                           onBlur={(e) => (e.target.style.borderColor = '#d0dce8')} />
                       </td>
 
+                      {/* Travel / Non-Travel */}
+                      <td className="px-2 py-1.5" style={{ minWidth: '150px' }}>
+                        <select className={inputClass} style={{ ...cellStyle, borderColor: '#d0dce8' }}
+                          value={inv.travel_type || ''}
+                          onChange={(e) => updateField(inv.id, 'travel_type', e.target.value || null)}
+                          onFocus={(e) => (e.target.style.borderColor = '#4a90d9')}
+                          onBlur={(e) => (e.target.style.borderColor = '#d0dce8')}>
+                          <option value="">Select type</option>
+                          {TRAVEL_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                        </select>
+                      </td>
+
                       {/* Proof */}
                       <td className="px-2 py-1.5" style={{ minWidth: '120px' }}>
                         {inv._uploading ? (
@@ -320,7 +334,7 @@ export default function InvoiceTracker() {
 
                   {invoices.length === 0 && (
                     <tr>
-                      <td colSpan={8} className="px-4 py-12 text-center text-sm" style={{ color: '#4a5568' }}>
+                      <td colSpan={9} className="px-4 py-12 text-center text-sm" style={{ color: '#4a5568' }}>
                         No invoices yet. Click &quot;Add Row&quot; to get started.
                       </td>
                     </tr>

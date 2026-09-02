@@ -1,15 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --navy: #0f2044;
-  --navy-mid: #1a3a6b;
-  --blue-light: #4a90d9;
-  --blue-pale: #e8f1fb;
+  --navy: #32317a;
+  --navy-mid: #45448d;
+  --blue-light: #95d2eb;
+  --blue-pale: #dff2f8;
   --white: #ffffff;
-  --gray-light: #f5f7fa;
-  --gray-border: #d0dce8;
-  --text-dark: #1a2640;
-  --text-mid: #4a5568;
+  --gray-light: #ebeef2;
+  --gray-border: #cbd7df;
+  --text-dark: #32317a;
+  --text-mid: #4b5560;
+  --coral: #efa4a4;
+  --yellow: #ebe393;
 }
 
 * {
@@ -17,9 +19,65 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background-color: var(--gray-light);
   color: var(--text-dark);
   margin: 0;
   padding: 0;
+}
+
+h1, h2, h3 {
+  font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+  letter-spacing: 0;
+}
+
+button, input, select, textarea {
+  font-family: 'Inter', sans-serif;
+}
+
+.editorial-header {
+  position: relative;
+  overflow: hidden;
+  background: var(--navy);
+}
+
+.editorial-header::after {
+  content: '';
+  position: absolute;
+  width: 18rem;
+  height: 18rem;
+  right: -7rem;
+  top: -11rem;
+  border-radius: 50%;
+  background: var(--blue-light);
+  opacity: 0.22;
+  filter: blur(24px);
+  animation: drift 12s ease-in-out infinite alternate;
+}
+
+.editorial-header > * {
+  position: relative;
+  z-index: 1;
+}
+
+.editorial-surface {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: var(--gray-border) !important;
+  box-shadow: 0 10px 30px rgba(50, 49, 122, 0.06);
+}
+
+.editorial-choice {
+  border-color: var(--gray-border) !important;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.editorial-choice:hover {
+  border-color: var(--blue-light) !important;
+  box-shadow: 0 12px 24px rgba(50, 49, 122, 0.1);
+  transform: translateY(-2px);
+}
+
+@keyframes drift {
+  from { transform: translate3d(-12px, 10px, 0) scale(0.9); }
+  to { transform: translate3d(10px, 18px, 0) scale(1.1); }
 }

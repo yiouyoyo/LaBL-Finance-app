@@ -27,7 +27,7 @@ function makeEmptyRow(): EditableInvoice {
   }
 }
 
-export default function InvoiceTracker() {
+export default function InvoiceTracker({ onBack }: { onBack?: () => void } = {}) {
   const [invoices, setInvoices] = useState<EditableInvoice[]>([])
   const [loading, setLoading] = useState(true)
   const [dbError, setDbError] = useState<string | null>(null)
@@ -35,19 +35,6 @@ export default function InvoiceTracker() {
   const [filterAccount, setFilterAccount] = useState('')
   const [filterTravel, setFilterTravel] = useState('')
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({})
-
-  useEffect(() => {
-    fetchInvoices()
-
-    const channel = supabase
-      .channel('invoices-realtime')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'invoices' }, () => {
-        fetchInvoices()
-      })
-      .subscribe()
-
-    return () => { supabase.removeChannel(channel) }
-  }, [])
 
   async function fetchInvoices() {
     const { data, error } = await supabase
@@ -62,6 +49,22 @@ export default function InvoiceTracker() {
     }
     setLoading(false)
   }
+
+  useEffect(() => {
+    const loadInvoices = async () => {
+      await fetchInvoices()
+    }
+    void loadInvoices()
+
+    const channel = supabase
+      .channel('invoices-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'invoices' }, () => {
+        fetchInvoices()
+      })
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
+  }, [])
 
   async function addRow() {
     // Add optimistic row immediately so UI responds right away
@@ -191,8 +194,21 @@ export default function InvoiceTracker() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f7fa' }}>
       <header style={{ backgroundColor: '#0f2044' }} className="px-4 py-4 sm:px-6">
-        <h1 className="text-white text-xl font-semibold tracking-tight">LaBL Finance Tracker</h1>
-        <p style={{ color: '#a8c4e0' }} className="text-xs mt-0.5">Language Biomarker Lab · Emory University</p>
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <h1 className="text-white text-xl font-semibold tracking-tight">LaBL Finance Tracker</h1>
+            <p style={{ color: '#a8c4e0' }} className="text-xs mt-0.5">Language Biomarker Lab · Emory University</p>
+          </div>
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="ml-4 px-3 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-80"
+              style={{ backgroundColor: '#1a3a6b', color: '#fff' }}
+            >
+              ← Back
+            </button>
+          )}
+        </div>
       </header>
 
       <main className="px-2 py-4 sm:px-4 sm:py-6">
@@ -364,6 +380,8 @@ export default function InvoiceTracker() {
                           <div className="flex flex-col gap-1 items-start">
                             {isImage(inv.proof_file_name) ? (
                               <a href={getPublicUrl(inv.proof_file_path)} target="_blank" rel="noopener noreferrer">
+                                {/* Supabase URLs are user-provided and not configured for next/image. */}
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img src={getPublicUrl(inv.proof_file_path)} alt="Invoice"
                                   className="rounded border object-cover"
                                   style={{ width: '56px', height: '56px', borderColor: '#d0dce8' }} />
@@ -376,7 +394,7 @@ export default function InvoiceTracker() {
                           </div>
                         ) : (
                           <>
-                            <input type="file" accept="image/*,.pdf"
+                            <input type="file" accept="*/*"
                               ref={(el) => { fileInputRefs.current[inv.id] = el }}
                               className="hidden"
                               onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFileUpload(inv.id, f) }} />

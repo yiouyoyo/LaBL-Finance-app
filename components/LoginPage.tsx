@@ -1,24 +1,25 @@
 'use client'
 
 import { useState } from 'react'
-import InvoiceTracker from './InvoiceTracker'
+import HomePage from './HomePage'
 
 export default function LoginPage() {
   const [authed, setAuthed] = useState(false)
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
   function handleLogin(e: React.FormEvent) {
     e.preventDefault()
-    if (password === 'LABL') {
+    if (email.toLowerCase().endsWith('@emory.edu') && password === 'LABL') {
       setAuthed(true)
       setError('')
     } else {
-      setError('Incorrect password. Please try again.')
+      setError('Use your @emory.edu email and the lab password.')
     }
   }
 
-  if (authed) return <InvoiceTracker />
+  if (authed) return <HomePage />
 
   return (
     <div
@@ -44,6 +45,29 @@ export default function LoginPage() {
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
               <label
+                htmlFor="email"
+                className="text-sm font-medium"
+                style={{ color: '#1a2640' }}
+              >
+                Emory Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@emory.edu"
+                className="w-full px-3 py-2 rounded-lg border text-sm outline-none"
+                style={{
+                  borderColor: '#d0dce8',
+                  color: '#1a2640',
+                  backgroundColor: '#f5f7fa',
+                }}
+                autoFocus
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label
                 htmlFor="password"
                 className="text-sm font-medium"
                 style={{ color: '#1a2640' }}
@@ -64,7 +88,6 @@ export default function LoginPage() {
                 }}
                 onFocus={(e) => (e.target.style.borderColor = '#4a90d9')}
                 onBlur={(e) => (e.target.style.borderColor = '#d0dce8')}
-                autoFocus
               />
             </div>
 

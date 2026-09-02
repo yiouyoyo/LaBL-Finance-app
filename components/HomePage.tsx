@@ -68,7 +68,13 @@ export default function HomePage() {
               </button>
               <div className="p-4 rounded-lg border" style={{ borderColor: '#cbd7df', backgroundColor: '#dff2f8' }}>
                 <h3 className="font-semibold" style={{ color: '#1a2640' }}>Finance rules</h3>
-                <p className="text-sm mt-1" style={{ color: '#4a5568' }}>Finance rules summary will appear here when the policy document is uploaded.</p>
+                <ul className="text-sm mt-2 space-y-1 list-disc list-inside" style={{ color: '#4a5568' }}>
+                  <li>Confirm Research, ProNET, or ProCAN with Dr. Wolff first.</li>
+                  <li>Enter every purchase item as a separate line.</li>
+                  <li>Upload the physical invoice or online order confirmation.</li>
+                  <li>Submit corporate-card invoices within one week.</li>
+                  <li>For reimbursement, get Dr. Wolff&apos;s signature and email the signed form to Courtney Farmer.</li>
+                </ul>
               </div>
             </div>
           </section>

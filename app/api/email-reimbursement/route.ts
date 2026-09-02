@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
   const resend = new Resend(apiKey)
   const { error } = await resend.emails.send({
     from: process.env.REIMBURSEMENT_FROM_EMAIL || 'LaBL Finance <onboarding@resend.dev>',
-    to: ['pwolff@emory.edu'],
+    to: ['courtney.farmer@emory.edu'],
     subject: `Reimbursement request from ${requesterName || 'Lab member'}`,
     text: 'A completed Psychology Reimbursement Form is attached for review.',
     attachments: [

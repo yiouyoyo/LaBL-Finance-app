@@ -297,7 +297,7 @@ export default function ReimbursementFlow({ onBack, onSubmitted }: { onBack: () 
       body: JSON.stringify({ pdfBase64, requesterName: formData.personName, receipts }),
     })
     const result = await response.json()
-    setEmailStatus(response.ok ? 'Emailed to pwolff@emory.edu' : result.error)
+    setEmailStatus(response.ok ? 'Emailed to courtney.farmer@emory.edu' : result.error)
   }
 
   const isStepComplete = (step: number): boolean => {
@@ -336,7 +336,7 @@ export default function ReimbursementFlow({ onBack, onSubmitted }: { onBack: () 
                 Reimbursement Request Submitted
               </h2>
               <p style={{ color: '#4a5568' }} className="mb-6">
-                Your reimbursement request has been submitted successfully. Your supervisor has been notified and will review your request.
+                Your reimbursement PDF is ready. After Dr. Wolff signs it, email the signed form to Courtney Farmer at courtney.farmer@emory.edu.
               </p>
               <button
                 onClick={downloadPdf}
@@ -350,7 +350,7 @@ export default function ReimbursementFlow({ onBack, onSubmitted }: { onBack: () 
                 className="px-6 py-2 rounded-lg text-white font-medium transition-opacity hover:opacity-90"
                 style={{ backgroundColor: '#27ae60' }}
               >
-                Email to Dr. Wolff
+                Email to Courtney Farmer
               </button>
               <button
                 onClick={onBack}
@@ -883,7 +883,7 @@ export default function ReimbursementFlow({ onBack, onSubmitted }: { onBack: () 
                   className="p-4 rounded-lg text-sm"
                   style={{ backgroundColor: '#e8f4f8', borderLeft: '4px solid #0288d1', color: '#01579b' }}
                 >
-                  <strong>Next Steps:</strong> Your reimbursement request will be sent to your supervisor for review. You will be notified once it has been approved and processed.
+                  <strong>Next Steps:</strong> Obtain Dr. Wolff&apos;s signature, then email the signed form to Courtney Farmer at courtney.farmer@emory.edu.
                 </div>
                 <button
                   onClick={previewPdf}

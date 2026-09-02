@@ -1,13 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 
 :root {
   --navy: #32317a;
-  --navy-mid: #45448d;
+  --navy-mid: #32317a;
   --blue-light: #95d2eb;
-  --blue-pale: #dff2f8;
+  --blue-pale: #95d2eb;
   --white: #ffffff;
   --gray-light: #ebeef2;
-  --gray-border: #cbd7df;
+  --gray-border: rgba(50, 49, 122, 0.18);
   --text-dark: #32317a;
   --text-mid: #4b5560;
   --coral: #efa4a4;
@@ -27,7 +28,8 @@ body {
 }
 
 h1, h2, h3 {
-  font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+  font-family: 'Bricolage Grotesque', 'Trebuchet MS', 'Segoe UI', sans-serif;
+  font-weight: 700;
   letter-spacing: 0;
 }
 
@@ -39,6 +41,7 @@ button, input, select, textarea {
   position: relative;
   overflow: hidden;
   background: var(--navy);
+  box-shadow: 0 6px 24px 0 rgba(50, 49, 122, 0.22);
 }
 
 .editorial-header::after {
@@ -61,21 +64,48 @@ button, input, select, textarea {
 }
 
 .editorial-surface {
-  background: rgba(255, 255, 255, 0.78);
-  border-color: var(--gray-border) !important;
-  box-shadow: 0 10px 30px rgba(50, 49, 122, 0.06);
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(50, 49, 122, 0.1) !important;
+  box-shadow: none;
 }
 
 .editorial-choice {
-  border-color: var(--gray-border) !important;
+  border-color: rgba(50, 49, 122, 0.22) !important;
+  background: rgba(50, 49, 122, 0.04) !important;
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .editorial-choice:hover {
   border-color: var(--blue-light) !important;
-  box-shadow: 0 12px 24px rgba(50, 49, 122, 0.1);
-  transform: translateY(-2px);
+  box-shadow: none;
+  transform: none;
 }
+
+.editorial-cta {
+  color: var(--navy);
+  border-bottom: 2px solid var(--blue-light);
+  padding-bottom: 2px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 600;
+  transition: color 150ms ease;
+}
+
+.editorial-cta:hover { color: rgba(50, 49, 122, 0.7); }
+
+.editorial-outline {
+  color: var(--navy);
+  border: 1px solid var(--navy);
+  border-radius: 0.375rem;
+  padding: 0.5rem 1.25rem;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.editorial-outline:hover { background: var(--navy); color: var(--gray-light); }
 
 @keyframes drift {
   from { transform: translate3d(-12px, 10px, 0) scale(0.9); }

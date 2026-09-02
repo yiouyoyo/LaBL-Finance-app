@@ -57,7 +57,7 @@ export default function CorporateCardRecords() {
   const grouped = groupedByYear(records)
 
   return (
-    <section className="editorial-surface bg-white rounded-xl border p-5 sm:p-6" style={{ borderColor: '#cbd7df' }}>
+    <section className="editorial-surface rounded-xl border p-5 sm:p-6" style={{ borderColor: 'rgba(50, 49, 122, 0.1)' }}>
       <div className="flex items-start justify-between gap-4 mb-5">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#4a90d9' }}>Browse only</p>

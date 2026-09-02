@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
+import Image from 'next/image'
 import { supabase, type Invoice, ACCOUNT_OPTIONS, TRAVEL_OPTIONS } from '@/lib/supabase'
 
 type EditableInvoice = Invoice & { _uploading?: boolean; _pending?: boolean }
@@ -193,10 +194,13 @@ export default function InvoiceTracker({ onBack }: { onBack?: () => void } = {})
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f7fa' }}>
-      <header style={{ backgroundColor: '#0f2044' }} className="px-4 py-4 sm:px-6">
+      <header style={{ backgroundColor: '#32317a' }} className="px-4 py-4 sm:px-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <h1 className="text-white text-xl font-semibold tracking-tight">LaBL Finance Tracker</h1>
+            <div className="flex items-center gap-3">
+              <Image src="/labl-icon.png" alt="LaBL" width={36} height={36} className="w-9 h-9 rounded-full" />
+              <h1 className="text-white text-xl font-semibold tracking-tight">LaBL Finance Tracker</h1>
+            </div>
             <p style={{ color: '#a8c4e0' }} className="text-xs mt-0.5">Language Biomarker Lab · Emory University</p>
           </div>
           {onBack && (

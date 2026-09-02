@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import HomePage from './HomePage'
 
 export default function LoginPage() {
@@ -29,9 +30,10 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         {/* Header */}
         <div
-          style={{ backgroundColor: '#0f2044' }}
+          style={{ backgroundColor: '#32317a' }}
           className="rounded-t-xl px-8 py-8 text-center"
         >
+          <Image src="/labl-icon.png" alt="LaBL" width={48} height={48} className="w-12 h-12 rounded-full mx-auto mb-4" />
           <h1 className="text-white text-2xl font-semibold tracking-tight leading-tight">
             LaBL Finance Tracker
           </h1>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import Image from 'next/image'
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 
 interface ReimbursementFormData {
@@ -309,10 +310,13 @@ export default function ReimbursementFlow({ onBack, onSubmitted }: { onBack: () 
   if (submitted) {
     return (
       <div className="min-h-screen" style={{ backgroundColor: '#f5f7fa' }}>
-        <header style={{ backgroundColor: '#0f2044' }} className="px-4 py-4 sm:px-6">
+        <header style={{ backgroundColor: '#32317a' }} className="px-4 py-4 sm:px-6">
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <h1 className="text-white text-xl font-semibold tracking-tight">Reimbursement Request</h1>
+              <div className="flex items-center gap-3">
+                <Image src="/labl-icon.png" alt="LaBL" width={36} height={36} className="w-9 h-9 rounded-full" />
+                <h1 className="text-white text-xl font-semibold tracking-tight">Reimbursement Request</h1>
+              </div>
               <p style={{ color: '#a8c4e0' }} className="text-xs mt-0.5">Psychology Reimbursement Form</p>
             </div>
             <button
@@ -369,10 +373,13 @@ export default function ReimbursementFlow({ onBack, onSubmitted }: { onBack: () 
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f7fa' }}>
-      <header style={{ backgroundColor: '#0f2044' }} className="px-4 py-4 sm:px-6">
+      <header style={{ backgroundColor: '#32317a' }} className="px-4 py-4 sm:px-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <h1 className="text-white text-xl font-semibold tracking-tight">Reimbursement Request</h1>
+            <div className="flex items-center gap-3">
+              <Image src="/labl-icon.png" alt="LaBL" width={36} height={36} className="w-9 h-9 rounded-full" />
+              <h1 className="text-white text-xl font-semibold tracking-tight">Reimbursement Request</h1>
+            </div>
             <p style={{ color: '#a8c4e0' }} className="text-xs mt-0.5">Psychology Reimbursement Form</p>
           </div>
           <button
